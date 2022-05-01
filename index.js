@@ -154,7 +154,24 @@ db.query (sql, (err,result) =>{
 
 // add a department to the database
 function addDepartment () {
-
+  inquirer.prompt({
+    name: 'newDepartment', 
+    type: 'input', 
+    message: 'Which department would you like to add?'
+    }).then(function (answer) {
+    db.query(
+        'INSERT INTO department SET ?',
+        {
+         name: answer.newDepartment
+        });
+        const sql = 'SELECT * FROM department';
+        connection.query(sql, function(err, res) {
+        if(err)throw err;
+        console.log('New department has been added!');
+        console.table('All Departments:', res);
+        initPrompt();
+      })
+  })
 }
 
 // add a role to the database
@@ -248,7 +265,24 @@ db.query (
 
 //Delete departments
 function deleteDepartment () {
-
+  db.query("SELECT * FROM department", (err, result) => {
+  if (err) throw err;
+  inquirer.prompt({
+      name: "department",
+      type: "list",
+      message: "Which department would you like to delete?",
+      choices: () => 
+        result.map((result) => result.name)
+    })
+    .then ((answer) => {
+    db.query(`SET FOREIGN_KEY_CHECKS=0; DELETE FROM department WHERE ?`, {name: answer.department},
+        (err, result) => {
+            if (err) throw err;
+            console.table(result);
+            initPrompt();
+        });
+    })
+})
 }
 //Delete roles
 function deleteRole(){

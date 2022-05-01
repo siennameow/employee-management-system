@@ -137,3 +137,4 @@ LEFT JOIN department
 ON role.department_id = department.id
 WHERE name = department_name_input
 GROUP BY name
+
