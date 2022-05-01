@@ -165,4 +165,12 @@ INSERT INTO role SET
         salary = user_input_salary
         department_id = user_choose_departID
       
+-- delete role
+-- create non-duplicated role title lists for users to choose from
+SELECT DISTINCT title FROM role
+-- temporarily disable a foreign key constraint
+SET FOREIGN_KEY_CHECKS=0
+-- delete user choose role from database
+DELETE FROM role WHERE title = user_choose_roleTitle
+
 

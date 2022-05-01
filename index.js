@@ -330,7 +330,27 @@ function deleteDepartment () {
 
 //Delete roles
 function deleteRole () {
-
+  db.query("SELECT DISTINCT title FROM role", (err, result) => {
+    if (err) throw err;
+    inquirer.prompt({
+        name: "title",
+        type: "list",
+        message: "Which role would you like to delete?",
+        choices: () => 
+          result.map((result) => result.title)
+      })
+      .then ((answer) => {
+      db.query(`SET FOREIGN_KEY_CHECKS=0;
+      DELETE FROM role WHERE ?`, {title: answer.title},
+          (err, result) => {
+              if (err) throw err;
+              console.log(
+                "Successfully deleted the " + answer.title + " role."
+              );
+              initPrompt();
+          });
+      })
+  })
 }
 
 //Delete employees
