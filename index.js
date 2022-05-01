@@ -1,8 +1,7 @@
 // Import modules
-const express = require('inquirer');
+const inquirer = require('inquirer');
 const mysql = require('mysql2');
 const consoleTables = require("console.table");
-const inquirer = require('inquirer');
 
 // Connect to database
 const db = mysql.createConnection(
@@ -37,7 +36,7 @@ function start() {
         "View employees.",
         "View total budget utilization by department.",
         "View employees with the same manager.",
-        "View employees by department",
+        "View employees by department.",
         "Update an employee's role.",
         "Update an employee's manager.",
         "Delete a department.",
@@ -46,7 +45,67 @@ function start() {
         "Exit.",
       ],
     }).then(function(answer){
+        switch (answer.action) {
+        case "Add a department.":
+          addDepartment();
+          break;
 
+        case "Add a role.":
+          addRole();
+          break;
+
+        case "Add an employee.":
+          addEmployee();
+          break;
+
+        case "View departments.":
+          viewDepartment();
+          break;
+
+        case "View roles.":
+          viewRole();
+          break;
+
+        case "View employees.":
+          viewEmployee();
+          break;
+
+        case "View total budget utilization by department.":
+          budgetUtilized();
+          break;
+
+        case "View employees with the same manager.":
+          viewEmpByManager();
+          break;
+
+        case "View employees by department.":
+          viewEmpByDepartment();
+          break;
+
+        case "Update an employee's role.":
+          updateRole();
+          break;
+
+        case "Update an employee's manager.":
+          updateEmpManager();
+          break;
+
+        case "Delete a department.":
+          deleteDepartment();
+          break;
+
+        case "Delete a role.":
+          deleteRole();
+          break;
+
+        case "Delete an employee.":
+          deleteEmployee();
+          break;
+
+        case "Exit.":
+          db.end();
+          break;
+      }
     })
 }
 
@@ -110,7 +169,7 @@ function deleteRole(){
 }
 
 //Delete employees
-function deleteEmp(){
+function deleteEmployee(){
 
 }
 
