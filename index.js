@@ -40,7 +40,7 @@ function initPrompt() {
   inquirer.prompt ({
     name: 'action',
     type: 'list',
-    message: 'Welcome to our employee database! What would you like to do?',
+    message: 'What would you like to do?',
     choices: [
         "Add a department.",
         "Add a role.",
