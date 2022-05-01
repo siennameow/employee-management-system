@@ -9,7 +9,8 @@ const db = mysql.createConnection(
       host: 'localhost',
       user: 'root',
       password: 'password',
-      database: 'emptrack_db'
+      database: 'emptrack_db',
+      multipleStatements: true
     },
     console.log(`Connected to the emptrack_db database.`)
   );
@@ -160,14 +161,14 @@ function addDepartment () {
     message: 'Which department would you like to add?'
     }).then(function (answer) {
     db.query(
-        'INSERT INTO department SET ?',
+        `ALTER TABLE department AUTO_INCREMENT = 1; INSERT INTO department SET ?`,
         {
          name: answer.newDepartment
         });
         const sql = 'SELECT * FROM department';
-        connection.query(sql, function(err, res) {
+        db.query(sql, function(err, res) {
         if(err)throw err;
-        console.log('New department has been added!');
+        console.log(answer.newDepartment + ' has been added!');
         console.table('All Departments:', res);
         initPrompt();
       })
@@ -275,10 +276,13 @@ function deleteDepartment () {
         result.map((result) => result.name)
     })
     .then ((answer) => {
-    db.query(`SET FOREIGN_KEY_CHECKS=0; DELETE FROM department WHERE ?`, {name: answer.department},
+    db.query(`SET FOREIGN_KEY_CHECKS=0;
+    DELETE FROM department WHERE ?`, {name: answer.department},
         (err, result) => {
             if (err) throw err;
-            console.table(result);
+            console.log(
+              "Successfully deleted the " + answer.department + " department."
+            );
             initPrompt();
         });
     })
