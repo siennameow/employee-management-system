@@ -262,5 +262,30 @@ function deleteEmployee(){
 
 //View the total utilized budget of a department
 function budgetUtilized (){
-    
+db.query (
+  `SELECT DISTINCT name from department`, (err,result) =>{
+  if (err) throw err;
+  inquirer.prompt({
+        name: "department",
+        type: "list",
+        message: "Which department would you like to view?",
+        choices: () =>
+        result.map((result) => result.name),
+        })
+        .then ((answer) => {
+          db.query (
+          `SELECT name AS department, SUM(salary) AS utilized_budget
+          FROM employee
+          LEFT JOIN role
+          ON employee.role_id = role.id
+          LEFT JOIN department
+          ON role.department_id = department.id
+          WHERE name = "${answer.department}"
+          GROUP BY name`, (err,finalResult) =>{
+            if (err) throw err;
+            console.table("The combined salaries of all employees in " + answer.department + " department is:", finalResult);
+            initPrompt();
+        })
+  })
+})
 }

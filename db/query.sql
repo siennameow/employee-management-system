@@ -95,3 +95,17 @@ LEFT JOIN employee e
 ON employee.manager_id = e.id
 WHERE name = department_name_user_input
 ORDER BY employee.role_id
+
+-- View the total utilized budget of a department
+-- show all the department in a table
+SELECT DISTINCT name from department
+-- return employee information acoording to user input
+-- SUM the total salary within a department
+SELECT name AS department, SUM(salary) AS utilized_budget
+FROM employee
+LEFT JOIN role
+ON employee.role_id = role.id
+LEFT JOIN department
+ON role.department_id = department.id
+WHERE name = department_name_input
+GROUP BY name
