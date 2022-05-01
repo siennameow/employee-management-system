@@ -174,3 +174,25 @@ SET FOREIGN_KEY_CHECKS=0
 DELETE FROM role WHERE title = user_choose_roleTitle
 
 
+--add employee
+-- create non-duplicated role title lists for users to choose from
+SELECT DISTINCT title, id FROM role
+-- create non-duplicated all manager lists for users to choose from
+SELECT DISTINCT CONCAT(e.first_name," ",e.last_name) AS manager_name,e.id
+FROM employee
+LEFT JOIN employee e
+ON employee.manager_id = e.id
+WHERE employee.manager_id IS NOT NULL
+-- insert user input to database
+INSERT INTO employee SET 
+        first_name = user_input_first_name,
+        last_name = user_input_last_name,
+        role_id = roleID(user_choose_role_id),
+        manager_id = managerID(user_choose_manager_id)
+
+-- delete employee
+-- create non-duplicated employee name lists for users to choose from
+SELECT DISTINCT CONCAT(first_name,' ',last_name) AS full_name FROM employee
+--delete employee from database
+DELETE FROM employee WHERE CONCAT(first_name,' ',last_name) = user_choose_name
+

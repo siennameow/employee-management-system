@@ -460,7 +460,7 @@ function deleteDepartment () {
         result.map((result) => result.name)
     })
     .then ((answer) => {
-    db.query(`SET FOREIGN_KEY_CHECKS=0;
+    db.query(`
     DELETE FROM department WHERE ?`, {name: answer.department},
         (err, result) => {
             if (err) throw err;
@@ -485,7 +485,7 @@ function deleteRole () {
           result.map((result) => result.title)
       })
       .then ((answer) => {
-      db.query(`SET FOREIGN_KEY_CHECKS=0;
+      db.query(`
       DELETE FROM role WHERE ?`, {title: answer.title},
           (err, result) => {
               if (err) throw err;
@@ -511,7 +511,7 @@ function deleteEmployee(){
       })
       .then ((answer) => {
         console.log(answer.full_name)
-      db.query(`SET FOREIGN_KEY_CHECKS=0;
+      db.query(`
       DELETE FROM employee WHERE CONCAT(first_name,' ',last_name) = "${answer.full_name}"`,
       
           (err, result) => {
