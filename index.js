@@ -23,11 +23,11 @@ db.connect(function(err){
 
 // prompts user with list of options to choose from
 function initPrompt() {
-    inquirer.prompt ({
-      name: 'action',
-      type: 'list',
-      message: 'Welcome to our employee database! What would you like to do?',
-      choices: [
+  inquirer.prompt ({
+    name: 'action',
+    type: 'list',
+    message: 'Welcome to our employee database! What would you like to do?',
+    choices: [
         "Add a department.",
         "Add a role.",
         "Add an employee.",
@@ -179,7 +179,38 @@ function updateEmpManager (){
 
 //view employees by manager
 function viewEmpByManager () {
-
+db.query (
+  `SELECT DISTINCT CONCAT(e.first_name," ",e.last_name) AS manager_name
+  FROM employee
+  LEFT JOIN employee e
+  ON employee.manager_id = e.id
+  WHERE employee.manager_id IS NOT NULL`, (err,result) =>{
+  if (err) throw err;
+  inquirer.prompt({
+        name: "manager",
+        type: "list",
+        message: "Which manager's team would you like to view?",
+        choices: () =>
+        result.map((result) => result.manager_name),
+        })
+        .then ((answer) => {
+          db.query (
+          `SELECT employee.id,employee.first_name,employee.last_name,title,name AS department,salary
+          FROM employee
+          LEFT JOIN role
+          ON employee.role_id = role.id
+          LEFT JOIN department
+          ON role.department_id = department.id
+          LEFT JOIN employee e
+          ON employee.manager_id = e.id
+          WHERE CONCAT(e.first_name," ",e.last_name) = "${answer.manager}"
+          ORDER BY employee.role_id`, (err,finalResult) =>{
+            if (err) throw err;
+            console.table(answer.manager + "'s Team: ", finalResult);
+            initPrompt();
+        })
+  })
+})
 }
 
 //View employees by department
