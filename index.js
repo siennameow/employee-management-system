@@ -120,7 +120,16 @@ db.query ("SELECT * FROM department", (err,result) =>{
 
 //view all roles in the database
 function viewRole () {
-
+db.query (
+  `SELECT role.id,title, department.name AS department,salary
+  FROM role 
+  LEFT JOIN department 
+  ON role.department_id = department.id
+  ORDER BY role.id`, (err,result) =>{
+  if (err) throw err;
+  console.table(result);
+  initPrompt();
+});
 }
 
 //view all employees in the database
