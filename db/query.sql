@@ -60,14 +60,15 @@ ORDER BY employee.role_id
 -- | 15 | Maria      | Hill      | Executive Assistant | Executive   | 250000 | Nick Fury        |
 -- +----+------------+-----------+---------------------+-------------+--------+------------------+
 
-manager_name_input = answer
-
+-- view employee by manager
+--show table with manager names
 SELECT DISTINCT CONCAT(e.first_name," ",e.last_name) AS manager_name
 FROM employee
 LEFT JOIN employee e
 ON employee.manager_id = e.id
 WHERE employee.manager_id IS NOT NULL
 
+--return employee information according to user input
 SELECT employee.id,employee.first_name,employee.last_name,title,name AS department,salary
 FROM employee
 LEFT JOIN role
@@ -76,5 +77,21 @@ LEFT JOIN department
 ON role.department_id = department.id
 LEFT JOIN employee e
 ON employee.manager_id = e.id
-WHERE CONCAT(e.first_name," ",e.last_name) = manager_name_input
+WHERE CONCAT(e.first_name," ",e.last_name) = manager_name_use_input
+ORDER BY employee.role_id
+
+-- view employee by department
+-- show all the department in a table
+SELECT DISTINCT name FROM department
+-- return employee information acoording to user input
+SELECT employee.id,employee.first_name,employee.last_name,title,name AS department,salary,
+CONCAT(e.first_name," ",e.last_name) as manager
+FROM employee
+LEFT JOIN role
+ON employee.role_id = role.id
+LEFT JOIN department
+ON role.department_id = department.id
+LEFT JOIN employee e
+ON employee.manager_id = e.id
+WHERE name = department_name_user_input
 ORDER BY employee.role_id

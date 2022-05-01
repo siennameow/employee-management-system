@@ -215,7 +215,35 @@ db.query (
 
 //View employees by department
 function viewEmpByDepartment () {
-
+db.query (
+  `SELECT DISTINCT name FROM department`, (err,result) =>{
+  if (err) throw err;
+  inquirer.prompt({
+        name: "department",
+        type: "list",
+        message: "Which department would you like to view?",
+        choices: () =>
+        result.map((result) => result.name),
+        })
+        .then ((answer) => {
+          db.query (
+          `SELECT employee.id,employee.first_name,employee.last_name,title,name AS department,salary,
+          CONCAT(e.first_name," ",e.last_name) as manager
+          FROM employee
+          LEFT JOIN role
+          ON employee.role_id = role.id
+          LEFT JOIN department
+          ON role.department_id = department.id
+          LEFT JOIN employee e
+          ON employee.manager_id = e.id
+          WHERE name = "${answer.department}"
+          ORDER BY employee.role_id`, (err,finalResult) =>{
+            if (err) throw err;
+            console.table("Employees under " + answer.department + " Department: ", finalResult);
+            initPrompt();
+        })
+  })
+})
 }
 
 //Delete departments
