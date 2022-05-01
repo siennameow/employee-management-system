@@ -142,8 +142,7 @@ GROUP BY name
 -- Reset Auto Increment Values
 ALTER TABLE department AUTO_INCREMENT = 1
 -- insert user input data to table 
-INSERT INTO department 
-SET name = user_input
+INSERT INTO department SET name = user_input
 -- show all the data in department
 SELECT * FROM department
 
@@ -154,4 +153,16 @@ SELECT DISTINCT name FROM department
 SET FOREIGN_KEY_CHECKS=0
 -- delete department
 DELETE FROM department WHERE name = user_input
+
+-- add role
+-- create non-duplicated department lists for users to choose from
+SELECT DISTINCT * FROM department
+-- Reset Auto Increment Values
+ALTER TABLE role AUTO_INCREMENT = 1
+-- insert user input role to database
+INSERT INTO role SET 
+        title = user_input_role
+        salary = user_input_salary
+        department_id = user_choose_departID
+      
 
