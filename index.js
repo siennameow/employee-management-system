@@ -2,6 +2,7 @@
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
 const consoleTables = require("console.table");
+const logo = require('asciiart-logo');
 
 // Connect to database
 const db = mysql.createConnection(
@@ -18,7 +19,19 @@ const db = mysql.createConnection(
 // connects to sql server and sql database
 db.connect(function(err){
     if (err) throw err;
-    console.log("Employee Management System")
+    console.log(
+      logo({
+          name: 'Employee Management System',
+          lineChars: 10,
+          padding: 2,
+          margin: 3,
+          borderColor: 'grey',
+          logoColor: 'skyblue',
+          textColor: 'skyblue',
+      })
+      .render()
+  );
+    console.log("Welcome to our employee database! ")
     initPrompt();
 })
 
@@ -105,7 +118,19 @@ function initPrompt() {
 
         case "Exit.":
           db.end();
-          console.log("Thanks for using Employee Management System. Have a nice day!");
+          console.log("Thanks for using Employee Management System. ")
+          console.log(
+            logo({
+                name: 'Have a nice day! Bye! ',
+                lineChars: 10,
+                padding: 2,
+                margin: 3,
+                borderColor: 'grey',
+                logoColor: 'skyblue',
+                textColor: 'skyblue',
+            })
+            .render()
+        );
           break;
       }
     })
@@ -460,7 +485,7 @@ function deleteDepartment () {
         result.map((result) => result.name)
     })
     .then ((answer) => {
-    db.query(`
+    db.query(`SET FOREIGN_KEY_CHECKS=0;
     DELETE FROM department WHERE ?`, {name: answer.department},
         (err, result) => {
             if (err) throw err;
@@ -485,7 +510,7 @@ function deleteRole () {
           result.map((result) => result.title)
       })
       .then ((answer) => {
-      db.query(`
+      db.query(`SET FOREIGN_KEY_CHECKS=0;
       DELETE FROM role WHERE ?`, {title: answer.title},
           (err, result) => {
               if (err) throw err;
@@ -511,7 +536,7 @@ function deleteEmployee(){
       })
       .then ((answer) => {
         console.log(answer.full_name)
-      db.query(`
+      db.query(`SET FOREIGN_KEY_CHECKS=0;
       DELETE FROM employee WHERE CONCAT(first_name,' ',last_name) = "${answer.full_name}"`,
       
           (err, result) => {
