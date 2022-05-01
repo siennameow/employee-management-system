@@ -177,8 +177,47 @@ function addDepartment () {
 
 // add a role to the database
 function addRole () {
+  db.query (
+    `SELECT DISTINCT * FROM department`, (err,result) =>{
+    if (err) throw err;
+    inquirer.prompt([
+    {
+      name: "role",
+      type: "input",
+      message: "What is the title of the role you like to add?",
+    },
+    {
+      name: "salary",
+      type: "input",
+      message: "What is the salary of the role? (must be a number and without separating with commas)",
+      // validate: validateNumber
+    },
+    {
+      name: 'department',
+      type: 'list',
+      message: "What department does the role belong to?",
+      choices: () =>
+      result.map((result) => result.name),
+  }])
+  .then(function (answers) {
+    const departmentID = result.filter((result) => result.name === answers.department)[0].id;
+    db.query(
+      "ALTER TABLE role AUTO_INCREMENT = 1; INSERT INTO role SET ?",
+      {
+        title: answers.role,
+        salary: answers.salary,
+        department_id: departmentID
+      },
+      function (err) {
+        if (err) throw err;
+        console.log(answers.role + " successfully add to roles under " + answers.department);
+        initPrompt();
+      }
+    );
+  });
+})
+};
 
-}
 
 //add an employee to the database
 function addEmployee () {
@@ -266,7 +305,7 @@ db.query (
 
 //Delete departments
 function deleteDepartment () {
-  db.query("SELECT * FROM department", (err, result) => {
+  db.query("SELECT DISTINCT name FROM department", (err, result) => {
   if (err) throw err;
   inquirer.prompt({
       name: "department",
@@ -288,8 +327,9 @@ function deleteDepartment () {
     })
 })
 }
+
 //Delete roles
-function deleteRole(){
+function deleteRole () {
 
 }
 

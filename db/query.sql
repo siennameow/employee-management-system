@@ -138,3 +138,20 @@ ON role.department_id = department.id
 WHERE name = department_name_input
 GROUP BY name
 
+-- add department
+-- Reset Auto Increment Values
+ALTER TABLE department AUTO_INCREMENT = 1
+-- insert user input data to table 
+INSERT INTO department 
+SET name = user_input
+-- show all the data in department
+SELECT * FROM department
+
+-- delete department
+-- create non-duplicated department lists for users to choose from
+SELECT DISTINCT name FROM department
+-- temporarily disable a foreign key constraint
+SET FOREIGN_KEY_CHECKS=0
+-- delete department
+DELETE FROM department WHERE name = user_input
+
