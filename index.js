@@ -450,7 +450,29 @@ function deleteRole () {
 
 //Delete employees
 function deleteEmployee(){
-
+  db.query("SELECT DISTINCT CONCAT(first_name,' ',last_name) AS full_name FROM employee", (err, result) => {
+    if (err) throw err;
+    inquirer.prompt({
+        name: "full_name",
+        type: "list",
+        message: "Which employee would you like to delete?",
+        choices: () => 
+          result.map((result) => result.full_name)
+      })
+      .then ((answer) => {
+        console.log(answer.full_name)
+      db.query(`SET FOREIGN_KEY_CHECKS=0;
+      DELETE FROM employee WHERE CONCAT(first_name,' ',last_name) = "${answer.full_name}"`,
+      
+          (err, result) => {
+              if (err) throw err;
+              console.log(
+                "Successfully deleted the employee named " + answer.full_name + "."
+              );
+              initPrompt();
+          });
+      })
+  })
 }
 
 //View the total utilized budget of a department
