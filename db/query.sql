@@ -1,11 +1,4 @@
 -- view all roles
--- join table 
-SELECT role.id,title, department.name AS department,salary
-FROM role 
-LEFT JOIN department 
-ON role.department_id = department.id
-ORDER BY role.id
-;
 -- +----+---------------------+-------------+--------+
 -- | id | title               | department  | salary |
 -- +----+---------------------+-------------+--------+
@@ -25,21 +18,16 @@ ORDER BY role.id
 -- | 14 | CEO                 | Executive   | 400000 |
 -- | 15 | Executive Assistant | Executive   | 250000 |
 -- +----+---------------------+-------------+--------+
-
--- view all employees
 -- join table 
-SELECT employee.id,employee.first_name,employee.last_name,title,name AS department,salary,
-CONCAT(e.first_name," ",e.last_name) AS manager
-FROM employee
-LEFT JOIN role
-ON employee.role_id = role.id
-LEFT JOIN department
+SELECT role.id,title, department.name AS department,salary
+FROM role 
+LEFT JOIN department 
 ON role.department_id = department.id
-LEFT JOIN employee e
-ON employee.manager_id = e.id
-ORDER BY employee.role_id
+ORDER BY role.id
 ;
 
+
+-- view all employees
 --+----+------------+-----------+---------------------+-------------+--------+------------------+
 -- | id | first_name | last_name | title               | department  | salary | manager          |
 -- +----+------------+-----------+---------------------+-------------+--------+------------------+
@@ -59,8 +47,32 @@ ORDER BY employee.role_id
 -- | 14 | Steve      | Rogers    | CEO                 | Executive   | 400000 | Nick Fury        |
 -- | 15 | Maria      | Hill      | Executive Assistant | Executive   | 250000 | Nick Fury        |
 -- +----+------------+-----------+---------------------+-------------+--------+------------------+
+-- join table 
+SELECT employee.id,employee.first_name,employee.last_name,title,name AS department,salary,
+CONCAT(e.first_name," ",e.last_name) AS manager
+FROM employee
+LEFT JOIN role
+ON employee.role_id = role.id
+LEFT JOIN department
+ON role.department_id = department.id
+LEFT JOIN employee e
+ON employee.manager_id = e.id
+ORDER BY employee.role_id
+;
 
 -- view employee by manager
+-- example
+-- Steve Rogers's Team: 
+-- -----------------------------------------------------------------
+-- id  first_name  last_name  title              department   salary
+-- --  ----------  ---------  -----------------  -----------  ------
+-- 1   Melinda     May        Sales Lead         Sales        100000
+-- 3   Tony        Stark      Lead Engineer      Engineering  150000
+-- 5   Sam         Wilson     Account Manager    Finance      160000
+-- 7   Bruce       Banner     Legal Team Lead    Legal        200000
+-- 9   Stephen     Strange    Marketing Manager  Marketing    120000
+-- 11  Natasha     Romanoff   HR Lead            HR           120000
+
 --show table with manager names
 SELECT DISTINCT CONCAT(e.first_name," ",e.last_name) AS manager_name
 FROM employee
@@ -81,6 +93,14 @@ WHERE CONCAT(e.first_name," ",e.last_name) = manager_name_use_input
 ORDER BY employee.role_id
 
 -- view employee by department
+-- example
+-- Employees under HR Department: 
+-- -------------------------------------------------------------------------
+-- id  first_name  last_name  title       department  salary  manager         
+-- --  ----------  ---------  ----------  ----------  ------  ----------------
+-- 11  Natasha     Romanoff   HR Lead     HR          120000  Steve Rogers    
+-- 12  Pepper      Potts      HR Manager  HR          100000  Natasha Romanoff
+
 -- show all the department in a table
 SELECT DISTINCT name FROM department
 -- return employee information acoording to user input
@@ -96,7 +116,15 @@ ON employee.manager_id = e.id
 WHERE name = department_name_user_input
 ORDER BY employee.role_id
 
+
 -- View the total utilized budget of a department
+-- example 
+-- The combined salaries of all employees in SalesDepartment is:
+-- -----------------------------------------------------------
+-- department  budget
+-- ----------  ------
+-- Sales       180000
+
 -- show all the department in a table
 SELECT DISTINCT name from department
 -- return employee information acoording to user input
