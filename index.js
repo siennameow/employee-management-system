@@ -18,11 +18,11 @@ const db = mysql.createConnection(
 db.connect(function(err){
     if (err) throw err;
     console.log("Employee Management System")
-    start();
+    initPrompt();
 })
 
 // prompts user with list of options to choose from
-function start() {
+function initPrompt() {
     inquirer.prompt ({
       name: 'action',
       type: 'list',
@@ -111,7 +111,11 @@ function start() {
 
 // view all departments in the database
 function viewDepartment (){
-
+db.query ("SELECT * FROM department", (err,result) =>{
+  if (err) throw err;
+  console.table(result);
+  initPrompt();
+});
 }
 
 //view all roles in the database
