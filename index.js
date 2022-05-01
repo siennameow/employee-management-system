@@ -105,6 +105,7 @@ function initPrompt() {
 
         case "Exit.":
           db.end();
+          console.log("Thanks for using Employee Management System. Have a nice day!");
           break;
       }
     })
@@ -145,7 +146,7 @@ const sql = `SELECT employee.id,employee.first_name,employee.last_name,title,nam
   ON role.department_id = department.id
   LEFT JOIN employee e
   ON employee.manager_id = e.id
-  ORDER BY employee.role_id;`;
+  ORDER BY employee.id;`;
 db.query (sql, (err,result) =>{
   if (err) throw err;
   console.table(result);
@@ -221,8 +222,62 @@ function addRole () {
 
 //add an employee to the database
 function addEmployee () {
-
-}
+  db.query (
+    `SELECT DISTINCT title,id FROM role`, (err,role_result) =>{
+    if (err) throw err;
+    db.query (
+      `SELECT DISTINCT CONCAT(e.first_name," ",e.last_name) AS manager_name,e.id
+      FROM employee
+      LEFT JOIN employee e
+      ON employee.manager_id = e.id
+      WHERE employee.manager_id IS NOT NULL`, (err,manager_result) =>{
+      if (err) throw err;
+        inquirer.prompt([
+        {
+          name: "first_name",
+          type: "input",
+          message: "What is the employee's first name?",
+        },
+        {
+          name: "last_name",
+          type: "input",
+          message: "What is the employee's last name?",
+        },
+        {
+          name: "role",
+          type: "list",
+          message: "What is the employee's role?",
+          choices: () =>
+          role_result.map((role_result) => role_result.title),
+        },
+        {
+          name: 'manager',
+          type: 'list',
+          message: "Who is the employee's manager?",
+          choices: () =>
+          manager_result.map((manager_result) => manager_result.manager_name),
+      }])
+  .then(function (answers) {
+    const managerID = manager_result.filter((manager_result) => manager_result.manager_name === answers.manager)[0].id;
+    const roleID = role_result.filter((role_result) => role_result.title === answers.role)[0].id;
+    db.query(
+      "ALTER TABLE employee AUTO_INCREMENT = 1; INSERT INTO employee SET ?",
+      { 
+        first_name: answers.first_name,
+        last_name: answers.last_name,
+        role_id: roleID,
+        manager_id: managerID
+      },
+      function (err) {
+        if (err) throw err;
+        console.log(answers.first_name + ' ' + answers.last_name + " is successfully added!");
+        initPrompt();
+      }
+    );
+  });
+})
+})
+};
 
 //update a role in the database
 function updateRole () {
@@ -231,7 +286,47 @@ function updateRole () {
 
 //Update employee managers in the database
 function updateEmpManager (){
-
+  db.query("SELECT * FROM employee", (err, results) => {
+    if (err) throw err;
+    inquirer.prompt([
+        {
+          name: "employee",
+          type: "list",
+          message: "Which employee's would you like to add?",
+          choices: () =>
+            results.map(
+              (result) => result.first_name + " " + result.last_name
+            ),
+        },
+        {
+          name: "manager",
+          type: "list",
+          message: "Who is this employee's new manager?",
+          choices: () =>
+            results.map(
+              (result) => result.first_name + " " + result.last_name
+            ),
+        },
+      ])
+      .then((answers) => {
+        let employeeID = results.filter(
+          (result) =>
+            result.first_name + " " + result.last_name === answers.employee
+        )[0].id;
+        let managerID = results.filter(
+          (result) =>
+            result.first_name + " " + result.last_name === answers.manager
+        )[0].id;
+        connection.query(`UPDATE employee SET manager_id = ? WHERE id = ? `, [
+          managerID,
+          employeeID,
+        ]);
+        console.log(
+          answers.manager + " is now the manager of " + answers.employee
+        );
+        start();
+      });
+  });
 }
 
 //view employees by manager
