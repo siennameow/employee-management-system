@@ -216,7 +216,14 @@ function addRole () {
       name: "salary",
       type: "input",
       message: "What is the salary of the role? (must be a number and without separating with commas)",
-      // validate: validateNumber
+      validate: input => {
+        if  (isNaN(input)) {
+            console.log ("Please enter a number!")
+            return false; 
+        } else {
+            return true;
+        }
+    }
     },
     {
       name: 'department',
