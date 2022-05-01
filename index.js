@@ -18,13 +18,33 @@ const db = mysql.createConnection(
 // connects to sql server and sql database
 db.connect(function(err){
     if (err) throw err;
+    console.log("Employee Management System")
     start();
 })
 
 // prompts user with list of options to choose from
 function start() {
     inquirer.prompt ({
-
+      name: 'action',
+      type: 'list',
+      message: 'Welcome to our employee database! What would you like to do?',
+      choices: [
+        "Add a department.",
+        "Add a role.",
+        "Add an employee.",
+        "View departments.",
+        "View roles.",
+        "View employees.",
+        "View total budget utilization by department.",
+        "View employees with the same manager.",
+        "View employees by department",
+        "Update an employee's role.",
+        "Update an employee's manager.",
+        "Delete a department.",
+        "Delete a role.",
+        "Delete an employee.",
+        "Exit.",
+      ],
     }).then(function(answer){
 
     })
