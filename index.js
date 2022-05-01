@@ -286,16 +286,22 @@ function updateRole () {
 
 //Update employee managers in the database
 function updateEmpManager (){
-  db.query("SELECT * FROM employee", (err, results) => {
+  db.query(`SELECT * FROM employee`, (err, employee_result) => {
     if (err) throw err;
-    inquirer.prompt([
+    db.query(`SELECT DISTINCT CONCAT(e.first_name," ",e.last_name) AS manager_name,e.id
+          FROM employee
+          LEFT JOIN employee e
+          ON employee.manager_id = e.id
+          WHERE employee.manager_id IS NOT NULL`, (err, manager_result) => {
+          if (err) throw err;
+          inquirer.prompt([
         {
           name: "employee",
           type: "list",
-          message: "Which employee's would you like to add?",
+          message: "Which employee would you like to update?",
           choices: () =>
-            results.map(
-              (result) => result.first_name + " " + result.last_name
+          employee_result.map(
+              (employee_result) => employee_result.first_name + " " + employee_result.last_name
             ),
         },
         {
@@ -303,31 +309,32 @@ function updateEmpManager (){
           type: "list",
           message: "Who is this employee's new manager?",
           choices: () =>
-            results.map(
-              (result) => result.first_name + " " + result.last_name
+          manager_result.map(
+              (manager_result) => manager_result.manager_name
             ),
         },
       ])
       .then((answers) => {
-        let employeeID = results.filter(
-          (result) =>
-            result.first_name + " " + result.last_name === answers.employee
-        )[0].id;
-        let managerID = results.filter(
-          (result) =>
-            result.first_name + " " + result.last_name === answers.manager
-        )[0].id;
-        connection.query(`UPDATE employee SET manager_id = ? WHERE id = ? `, [
-          managerID,
-          employeeID,
-        ]);
-        console.log(
-          answers.manager + " is now the manager of " + answers.employee
+        const managerID = manager_result.filter((manager_result) => manager_result.manager_name === answers.manager)[0].id;
+        const empID = employee_result.filter((employee_result) => employee_result.first_name + " " + employee_result.last_name === answers.employee)[0].id;
+        db.query(
+          `UPDATE employee SET ? WHERE ?`,
+          [{ 
+            manager_id: managerID
+          },
+          {
+            id: empID
+          }],
+          function (err) {
+            if (err) throw err;
+            console.log(answers.employee + "'s manager is successfully updated!");
+            initPrompt();
+          }
         );
-        start();
-      });
-  });
-}
+       });
+    })
+  })
+};
 
 //view employees by manager
 function viewEmpByManager () {
