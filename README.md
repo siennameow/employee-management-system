@@ -1,6 +1,6 @@
 # Employee Management System
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/siennameow/note-taker/blob/main/LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/siennameow/employee-management-system/blob/main/LICENSE)
 
 ## Description 📝 
 
@@ -34,12 +34,13 @@ Link to the demo video : https://drive.google.com/file/d/1p8CUXOQfv34vQwKqSe5V6H
 ## Application Preview ⭐
 
 Demo
+![demo](https://user-images.githubusercontent.com/101283174/166170951-8b790a20-ed9d-4c15-a219-2cd0dca3143b.gif)
 
 
 Application Preview:
-| Main Page | Note Page |
+|  welcome  |     Bye   |
 |-----------|-----------|
-|           |           |
+| ![welcome](https://user-images.githubusercontent.com/101283174/166170991-4d34c5ea-7286-480e-a0e2-218598bb9130.png) | ![bye](https://user-images.githubusercontent.com/101283174/166171002-333f3ccc-f0e9-4d4b-82cd-dfb512579b84.png)|
 
 ## Features 📋
 
@@ -140,7 +141,7 @@ After installation :
 * [console.table](https://www.npmjs.com/package/console.table)
 
 ## License 📜
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/siennameow/note-taker/blob/main/LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/siennameow/employee-management-system/blob/main/LICENSE)
 MIT License
 
 Copyright (c) 2022 Sienna Li
