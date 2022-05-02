@@ -4,9 +4,20 @@
 
 ## Description 📝 
 
-This is a simple Note Taker application that allows users to add, view saved notes and also delete the notes if the user don't need that note anymore. This application uses an express backend and save and retrieve note data from a JSON file.
+The Employee Management System is a Command-line interface based application written in Javascript utilizing node, inquirer and mySQL on the backend to provide the user with a large array of possible functions. The mySQL database schema has a table for departments, roles, and employees that allow for the user to manipulate the data within each table in several ways.
 
-Deployed Application : https://note-taker-platinum.herokuapp.com/
+Users are able to :
+- add, view or delete...
+  - employees
+  - departments
+  - roles
+- view employee based on common manager's
+- view how much each department is utilizing on salary
+- update who is set as the manager of an employee
+- update an employee's current role
+
+
+Link to the demo video : https://drive.google.com/file/d/1p8CUXOQfv34vQwKqSe5V6Hi-Tir46Ajr/view
 
 ## Table of Contents 📖
 
@@ -24,18 +35,17 @@ Deployed Application : https://note-taker-platinum.herokuapp.com/
 
 Demo
 
-![Note Taker](https://user-images.githubusercontent.com/101283174/165661673-3e30d689-172e-40e8-8755-4aa7a33d6413.gif)
 
 Application Preview:
 | Main Page | Note Page |
 |-----------|-----------|
-|![Screen Shot 2022-04-27 at 7 02 06 PM](https://user-images.githubusercontent.com/101283174/165661564-66bb996e-1e7b-403e-b52a-c3ea87c03751.png)|  ![Screen Shot 2022-04-27 at 7 02 18 PM](https://user-images.githubusercontent.com/101283174/165661771-103632f6-ff10-473d-931a-c34a14fac301.png)|
+|           |           |
 
 ## Features 📋
 
-⚡️ `Express.js` to build server\
-⚡️ `fs(File System)` module to read and write from 'db.json' file.\
-⚡️ `path` module to Joins the specified paths into one\
+⚡️ `inquirer` to interact with the user via the command line\
+⚡️ `mysql2` module to connect to MySQL database and perform queries\
+⚡️ `console.table` module to print MySQL rows to the console\
 ⚡️ deployed on [heroku](http://heroku.com/)
 
 
@@ -43,69 +53,91 @@ Application Preview:
 
 JavaScript
 
-API route DELETE to receive a query parameter that contains the id of a note to delete. It reads all notes from the db.json file, remove the note with the given id property, and then rewrite the notes to the db.json file.
+Function to query database and allow user to view the total utilized budget of a department
 
 ```JavaScript
-app.delete('/api/notes/:id', (req, res) => {
-  
-  fs.readFile('./db/db.json', 'utf8', (err, data) => {
-    if (err) throw err;
-    let notes = JSON.parse(data);
-    notes.forEach(function(thisNote, i) {              
-      if (thisNote.id === req.params.id) {
-        
-          notes.splice(i, 1)            
-      }
+function budgetUtilized (){
+db.query (
+  `SELECT DISTINCT name from department`, (err,result) =>{
+  if (err) throw err;
+  inquirer.prompt({
+        name: "department",
+        type: "list",
+        message: "Which department would you like to view?",
+        choices: () =>
+        result.map((result) => result.name),
+        })
+        .then ((answer) => {
+          db.query (
+          `SELECT name AS department, SUM(salary) AS utilized_budget
+          FROM employee
+          LEFT JOIN role
+          ON employee.role_id = role.id
+          LEFT JOIN department
+          ON role.department_id = department.id
+          WHERE name = "${answer.department}"
+          GROUP BY name`, (err,finalResult) =>{
+            if (err) throw err;
+            console.table("The combined salaries of all employees in " + answer.department + " department is:", finalResult);
+            initPrompt();
+        })
+  })
 })
+}
 ```
 
-API route POST receive a new note to save on the request body, add it to the db.json file, and then return the new note to the client. 
+Function to prompt user and lelete roles from database
 
 ```JavaScript
-app.post('/api/notes', (req, res) => {
-  fs.readFile('./db/db.json', 'utf8', (err, data) => {
-
+function deleteRole () {
+  db.query("SELECT DISTINCT title FROM role", (err, result) => {
     if (err) throw err;
-    var notes = JSON.parse(data);
-    let addNote = req.body;
-    addNote.id = uuid();
-    notes.push(addNote);
-
-    fs.writeFile('./db/db.json', JSON.stringify(notes), (err, data) => {
-      if (err) throw err;
-      res.json(addNote);
-      console.info('Successfully updated notes!')
-    });
-  }); 
-});
+    inquirer.prompt({
+        name: "title",
+        type: "list",
+        message: "Which role would you like to delete?",
+        choices: () => 
+          result.map((result) => result.title)
+      })
+      .then ((answer) => {
+      db.query(`SET FOREIGN_KEY_CHECKS=0;
+      DELETE FROM role WHERE ?`, {title: answer.title},
+          (err, result) => {
+              if (err) throw err;
+              console.log(
+                "Successfully deleted the " + answer.title + " role."
+              );
+              initPrompt();
+          });
+      })
+  })
+}
 ```
 
 ## Installation 🗳 
 
-- Download or clone repository to use this application on local machine.
-- Node.js is required to run the application
-- To install necessary dependencies, run the following command :
->    `npm i`
+After downloading the repository, run `npm i` to install several dependencies for the package. 
+
+Besides that, either from the command line or from mySQL Workbench, use the `schema.sql` file to generate the appropriate schema for your database and `seeds.sql` to import dummy data to get started. If you choose not to use the dummy data, I recommend first creating the departments, then the roles within each departments, and then the employees.
 
 ## Usage 💡
 
 After installation :
 
-- Run `node server.js` in terminal to start. It will show a comment "This will start localhost server on PORT 3001."
+1. Either from the command line or from mySQL Workbench, run `schema.sql` file to generate the appropriate schema for your database and `seeds.sql` to import dummy data to get started.
+2. Run `node index.js` to start
+3. Follow through the prompts as required 
 
-- Open browser and type http://localhost:3001/ to run this application on your local machine.
-
-You can also check the Deployed Live Application : https://note-taker-platinum.herokuapp.com/
 
 ## Technologies 🔧
 
 * [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML)
 * [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS)
 * [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-* [Express.js](https://expressjs.com/)
+* [inquirer.js](https://www.npmjs.com/package/inquirer)
 * [Node.js](https://nodejs.org/en/)
-* [Heroku](https://www.heroku.com/home)
-* [JSON](https://www.json.org/json-en.html)
+* [MySQL](https://www.mysql.com/)
+* [console.table](https://www.npmjs.com/package/console.table)
 
 ## License 📜
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/siennameow/note-taker/blob/main/LICENSE)
