@@ -41,9 +41,14 @@ Demo GIF
 
 Application Preview:
 
-|  welcome  |prompt user| view table|exit app  |
-|-----------|-----------|-----------|-----------|
-| <img src="/assets/welcome.png" >| <img src="/assets/prompt.png" >|<img src="/assets/table.png"> |<img src="/assets/bye.png" > |
+|  welcome  |prompt user|
+|-----------|-----------|
+| <img src="/assets/welcome.png" >| <img src="/assets/prompt.png" >|
+
+| view table| exit app  |
+|-----------|-----------|
+|<img src="/assets/table.png"> |<img src="/assets/bye.png" > |
+
 
 ## Features 📋
 
