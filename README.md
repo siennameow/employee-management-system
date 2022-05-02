@@ -124,16 +124,23 @@ function deleteRole () {
 
 ## Installation 🗳 
 
-After downloading the repository, run `npm i` to install several dependencies for the package. 
+- Download or clone repository to use this application on local machine.
+- Node.js is required to run the application
+- To install necessary dependencies, run the following command :
+>    `npm i`
 
 ## Usage 💡
 
 After installation :
 
-1. Either from the command line or from mySQL Workbench, run `schema.sql` file to generate the appropriate schema for your database and `seeds.sql` to import dummy data to get started.
-2. If you choose not to use the dummy data, I recommend first creating the table for departments, then the roles within each departments, and then the employees.
-3. Run `node index.js` to start
-4. Follow through the prompts as required 
+1. Run `node index.js` in terminal to start. 
+2. Follow through the prompts as required. 
+
+Note:
+
+- Need to be in the main folder in terminal when running the command.
+- If you choose not to use the dummy data, I recommend create your own database from scratch.
+- I recommend first creating the table for departments, then the roles within each departments, and then the employees.This is important becasue "add", "delete" and "view by" are prompted by lists generated from database.
 
 
 ## Technologies 🔧
