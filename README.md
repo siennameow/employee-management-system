@@ -36,14 +36,14 @@ Link to the demo video : https://drive.google.com/file/d/1p8CUXOQfv34vQwKqSe5V6H
 Demo
 
 
-![demo](https://user-images.githubusercontent.com/101283174/166170951-8b790a20-ed9d-4c15-a219-2cd0dca3143b.gif)
+![demo](width="400px" https://user-images.githubusercontent.com/101283174/166170951-8b790a20-ed9d-4c15-a219-2cd0dca3143b.gif)
 
 
 Application Preview:
 
 |  welcome  | view table| exit app  |
 |-----------|-----------|-----------|
-| ![welcome](https://user-images.githubusercontent.com/101283174/166170991-4d34c5ea-7286-480e-a0e2-218598bb9130.png) | ![Screen Shot 2022-05-01 at 5 31 08 PM](https://user-images.githubusercontent.com/101283174/166171297-a9dd0f20-5d1d-4607-8735-3cfab42c0fb2.png)|![bye](https://user-images.githubusercontent.com/101283174/166171002-333f3ccc-f0e9-4d4b-82cd-dfb512579b84.png) |
+| ![welcome](height="200px" https://user-images.githubusercontent.com/101283174/166170991-4d34c5ea-7286-480e-a0e2-218598bb9130.png) | ![Screen Shot 2022-05-01 at 5 31 08 PM](height="200px" https://user-images.githubusercontent.com/101283174/166171297-a9dd0f20-5d1d-4607-8735-3cfab42c0fb2.png)|![bye](height="200px" https://user-images.githubusercontent.com/101283174/166171002-333f3ccc-f0e9-4d4b-82cd-dfb512579b84.png) |
 
 ## Features 📋
 
