@@ -34,6 +34,8 @@ Link to the demo video : https://drive.google.com/file/d/1p8CUXOQfv34vQwKqSe5V6H
 ## Application Preview ⭐
 
 Demo
+
+
 ![demo](https://user-images.githubusercontent.com/101283174/166170951-8b790a20-ed9d-4c15-a219-2cd0dca3143b.gif)
 
 
@@ -46,8 +48,7 @@ Application Preview:
 
 ⚡️ `inquirer` to interact with the user via the command line\
 ⚡️ `mysql2` module to connect to MySQL database and perform queries\
-⚡️ `console.table` module to print MySQL rows to the console\
-⚡️ deployed on [heroku](http://heroku.com/)
+⚡️ `console.table` module to print MySQL rows to the console
 
 
 ## Code Snippet 💻
@@ -119,15 +120,14 @@ function deleteRole () {
 
 After downloading the repository, run `npm i` to install several dependencies for the package. 
 
-Besides that, either from the command line or from mySQL Workbench, use the `schema.sql` file to generate the appropriate schema for your database and `seeds.sql` to import dummy data to get started. If you choose not to use the dummy data, I recommend first creating the departments, then the roles within each departments, and then the employees.
-
 ## Usage 💡
 
 After installation :
 
 1. Either from the command line or from mySQL Workbench, run `schema.sql` file to generate the appropriate schema for your database and `seeds.sql` to import dummy data to get started.
-2. Run `node index.js` to start
-3. Follow through the prompts as required 
+2. If you choose not to use the dummy data, I recommend first creating the table for departments, then the roles within each departments, and then the employees.
+3. Run `node index.js` to start
+4. Follow through the prompts as required 
 
 
 ## Technologies 🔧
