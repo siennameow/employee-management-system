@@ -142,7 +142,6 @@ Note:
 - If you choose not to use the dummy data, I recommend create your own database from scratch.
 - I recommend first creating the table for departments, then the roles within each departments, and then the employees.This is important becasue "add", "delete" and "view by" are prompted by lists generated from database.
 
-
 ## Technologies 🔧
 
 * [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML)
